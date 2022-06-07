@@ -1,4 +1,3 @@
 # Ignor ide
 /.idea
 
-/pkg/db/db.go

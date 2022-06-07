@@ -23,6 +23,7 @@ func (r *userRepo) Create(user *pb.Useri) (*pb.Useri, error) {
 		log.Panicf("%s\n%s", "Error while users to table addresses", err)
 	}
 	AddressQuery := `INSERT INTO addresses(id,user_id,country,city,district,postal_code) VALUES($1,$2,$3,$4,$5,$6)`
+
 	_, err = r.db.Exec(AddressQuery, user.Address.Id, user.Id, user.Address.Country, user.Address.City, user.Address.District, user.Address.PostalCode)
 	if err != nil {
 		log.Panicf("%s\n%s", "Error while inserting to table addresses", err)

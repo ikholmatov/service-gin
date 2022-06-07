@@ -42,25 +42,23 @@ func (h *handlerV1) CreateUser(c *gin.Context) {
 
 // GetUser gets user by id
 // route /v1/users/{id} [get]
-//func (h *handlerV1) GetUser(c *gin.Context) {
-//	var jspbMarshal protojson.MarshalOptions
-//	jspbMarshal.UseProtoNames = true
-//
-//	guid := c.Param("id")
-//	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
-//	defer cancel()
-//
-//	response, err := h.serviceManager.UserService().GetUserById(
-//		ctx, &pb.GetUserByIdRequest{
-//			Id: guid,
-//		})
-//	if err != nil {
-//		c.JSON(http.StatusInternalServerError, gin.H{
-//			"error": err.Error(),
-//		})
-//		h.log.Error("failed to get user", l.Error(err))
-//		return
-//	}
-//
-//	c.JSON(http.StatusOK, response)
-//}
+func (h *handlerV1) GetUser(c *gin.Context) {
+	var jspbMarshal protojson.MarshalOptions
+	jspbMarshal.UseProtoNames = true
+
+	guid := c.Param("id")
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
+	defer cancel()
+
+	response, err := h.serviceManager.UserService().GetByID(
+		ctx, &pb.GetIdFromUser{Id: guid})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		h.log.Error("failed to get user", l.Error(err))
+		return
+	}
+
+	c.JSON(http.StatusOK, response)
+}
