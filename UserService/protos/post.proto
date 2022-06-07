@@ -1,0 +1,31 @@
+syntax="proto3";
+package user;
+
+service PostService{
+  rpc PostCreate(Post) returns (Post);
+  rpc PostGetByID(GetIdFromUser) returns (Post);
+  rpc PostDeleteByID(GetIdFromUser) returns (OkBOOL);
+  rpc PostGetAllPosts(GetIdFromUser) returns (AllPost);
+}
+message AllPost{
+  repeated Post Posts = 1;
+}
+message Post{
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string user_id = 4;
+  repeated Media medias = 5;
+}
+message Media{
+  string id = 1;
+  string post_id = 2;
+  string type = 3;
+  string link = 4;
+}
+message GetIdFromUser{
+  string id = 1;
+}
+message OkBOOL{
+  bool status = 1;
+}

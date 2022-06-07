@@ -16,7 +16,7 @@ func NewUserRepo(db *sqlx.DB) *userRepo {
 	return &userRepo{db: db}
 }
 
-func (r *userRepo) Create(user *pb.User) (*pb.User, error) {
+func (r *userRepo) Create(user *pb.Useri) (*pb.Useri, error) {
 	UserQuery := `INSERT INTO users(id,first_name,last_name,email,bio,phone_number,type_id,status) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`
 	_, err := r.db.Exec(UserQuery, user.Id, user.FirstName, user.LastName, pq.Array(user.Email), user.Bio, pq.Array(user.PhoneNumber), user.TypeId, user.Status)
 	if err != nil {
@@ -30,8 +30,8 @@ func (r *userRepo) Create(user *pb.User) (*pb.User, error) {
 
 	return user, nil
 }
-func (r *userRepo) GetByID(ID string) (*pb.User, error) {
-	user := pb.User{}
+func (r *userRepo) GetByID(ID string) (*pb.Useri, error) {
+	user := pb.Useri{}
 	GetUsers := `SELECT id, first_name, last_name, email, bio, phone_number, type_id, status FROM users WHERE id = $1`
 	err := r.db.QueryRow(GetUsers, ID).Scan(&user.Id, &user.FirstName, &user.LastName, pq.Array(&user.Email), &user.Bio, pq.Array(&user.PhoneNumber), &user.TypeId, &user.Status)
 	if err != nil {

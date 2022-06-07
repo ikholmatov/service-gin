@@ -29,7 +29,7 @@ func NewUserService(db *sqlx.DB, log l.Logger, client cl.GrpcClientI) *UserServi
 	}
 }
 
-func (s *UserService) Create(ctx context.Context, req *pb.User) (*pb.User, error) {
+func (s *UserService) Create(ctx context.Context, req *pb.Useri) (*pb.Useri, error) {
 	id1 := uuid.NewV4()
 	id2 := uuid.NewV4()
 	req.Id = id1.String()
@@ -39,15 +39,27 @@ func (s *UserService) Create(ctx context.Context, req *pb.User) (*pb.User, error
 		s.logger.Error("Error while inserting user info", l.Error(err))
 		return nil, status.Error(codes.Internal, "Error insert user")
 	}
+
+	for _, posts := range user.Posts {
+		posts.UserId = id1.String()
+		post, err := s.client.PostService().PostCreate(ctx, posts)
+		if err != nil {
+			return nil, err
+		}
+		user.Posts = append(user.Posts, post)
+	}
+
 	return user, err
 }
-func (s *UserService) GetByID(ctx context.Context, req *pb.GetIdFromUserID) (*pb.User, error) {
+func (s *UserService) GetByID(ctx context.Context, req *pb.GetIdFromUser) (*pb.Useri, error) {
 	user, err := s.storage.User().GetByID(req.Id)
 	if err != nil {
 		fmt.Println(err)
 		s.logger.Error("Error while getting user info", l.Error(err))
 		return nil, status.Error(codes.Internal, "Error insert user")
 	}
+	
+	post, err := s.client.PostService().PostGetByID(ctx, req)
 
 	return user, err
 }

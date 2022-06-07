@@ -2,7 +2,6 @@ package v1
 
 import (
 	"context"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	pb "github.com/venomuz/project4/API-GATEWAY/genproto"
 	l "github.com/venomuz/project4/API-GATEWAY/pkg/logger"
@@ -13,9 +12,9 @@ import (
 
 func (h *handlerV1) CreateUser(c *gin.Context) {
 	var (
-		body        pb.User
 		jspbMarshal protojson.MarshalOptions
 	)
+	body := pb.Useri{}
 	jspbMarshal.UseProtoNames = true
 
 	err := c.ShouldBindJSON(&body)
@@ -26,7 +25,6 @@ func (h *handlerV1) CreateUser(c *gin.Context) {
 		h.log.Error("failed to bind json", l.Error(err))
 		return
 	}
-	fmt.Println(&body)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
 	defer cancel()
 

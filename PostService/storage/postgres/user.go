@@ -14,22 +14,24 @@ func NewPostRepo(db *sqlx.DB) *postRepo {
 	return &postRepo{db: db}
 }
 
-func (r *postRepo) PostCreate(post *pb.Post) (*pb.OkBOOL, error) {
-	PostQuery := `INSERT INTO posts(id,name,description,user_id) VALUES($1,$2,$3,$4)`
-
-	_, err := r.db.Exec(PostQuery, post.Id, post.Name, post.Description, post.UserId)
+func (r *postRepo) PostCreate(post *pb.Post) (*pb.Post, error) {
+	PostQuery := `INSERT INTO posts(id,name,description,user_id) VALUES($1,$2,$3,$4) RETURNING id,name,description,user_id`
+	Post := pb.Post{}
+	err := r.db.QueryRow(PostQuery, post.Id, post.Name, post.Description, post.UserId).Scan(&Post.Id, &Post.Name, &Post.Description, &Post.UserId)
 	if err != nil {
 		return nil, err
 	}
 	for _, media := range post.Medias {
-		PostQuery := `INSERT INTO medias(id,post_id,type,link) VALUES($1,$2,$3,$4)`
-		_, err := r.db.Exec(PostQuery, media.Id, post.Id, media.Type, media.Link)
+		Media := pb.Media{}
+		PostQuery := `INSERT INTO medias(id,post_id,type,link) VALUES($1,$2,$3,$4) RETURNING id,post_id,type,link`
+		err := r.db.QueryRow(PostQuery, media.Id, post.Id, media.Type, media.Link).Scan(&Media.Id, &Media.PostId, &Media.Type, &Media.Link)
 		if err != nil {
 			return nil, err
 		}
+		Post.Medias = append(Post.Medias, &Media)
 	}
 
-	return &pb.OkBOOL{Status: true}, nil
+	return &Post, nil
 }
 func (r *postRepo) PostGetByID(ID string) (*pb.Post, error) {
 	post := pb.Post{}

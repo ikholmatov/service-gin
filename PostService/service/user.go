@@ -26,7 +26,7 @@ func NewPostService(db *sqlx.DB, log l.Logger) *PostService {
 	}
 }
 
-func (s *PostService) PostCreate(ctx context.Context, req *pb.Post) (*pb.OkBOOL, error) {
+func (s *PostService) PostCreate(ctx context.Context, req *pb.Post) (*pb.Post, error) {
 	id1 := uuid.NewV4()
 	req.Id = id1.String()
 	for _, media := range req.Medias {

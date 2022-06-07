@@ -3,7 +3,7 @@ package user;
 import "post.proto";
 
 service UserService{
-  rpc Create(User) returns (User);
+  rpc Create(Useri) returns (Useri);
   rpc GetByID(GetIdFromUserID) returns (User);
   rpc DeleteByID(GetIdFromUserID) returns (GetIdFromUserID);
   rpc GetAllByUserId(GetIdFromUser) returns (Post);

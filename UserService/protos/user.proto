@@ -1,0 +1,53 @@
+syntax="proto3";
+package user;
+import "post.proto";
+
+service UserService{
+  rpc Create(Useri) returns (Useri);
+  rpc GetByID(GetIdFromUser) returns (Useri);
+  rpc DeleteByID(GetIdFromUserID) returns (GetIdFromUserID);
+  rpc GetAllByUserId(GetIdFromUser) returns (Post);
+  rpc GetAllUserFromDb(Empty) returns (AllUser);
+}
+
+message AllUser{
+  repeated Useri Users = 1;
+}
+
+message User{
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  repeated string email = 4;
+  string bio = 5;
+  repeated string phone_number = 6;
+  int64 type_id = 7;
+  bool status = 8;
+  Address address = 9;
+
+}
+message Address{
+  string id = 1;
+  string user_id = 2;
+  string country = 3;
+  string city = 4;
+  string district = 5;
+  int64 postal_code = 6;
+}
+message GetIdFromUserID{
+  string id = 1;
+}
+message Empty{
+}
+message Useri{
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  repeated string email = 4;
+  string bio = 5;
+  repeated string phone_number = 6;
+  int64 type_id = 7;
+  bool status = 8;
+  Address address = 9;
+  repeated Post posts = 10;
+}
