@@ -58,8 +58,8 @@ func (s *UserService) GetByID(ctx context.Context, req *pb.GetIdFromUser) (*pb.U
 		s.logger.Error("Error while getting user info", l.Error(err))
 		return nil, status.Error(codes.Internal, "Error insert user")
 	}
-	
-	post, err := s.client.PostService().PostGetByID(ctx, req)
+
+	_, err = s.client.PostService().PostGetByID(ctx, req)
 
 	return user, err
 }
