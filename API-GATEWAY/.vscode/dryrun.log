@@ -1,0 +1,5 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/kilogram/go/src/github.com/venomuz/project4/API-GATEWAY'
+CGO_ENABLED=0 GOOS=darwin go build -mod=vendor -a -installsuffix cgo -o /home/kilogram/go/src/github.com/venomuz/project4/API-GATEWAY/bin/template ./cmd/main.go
+make: Leaving directory '/home/kilogram/go/src/github.com/venomuz/project4/API-GATEWAY'
+ 

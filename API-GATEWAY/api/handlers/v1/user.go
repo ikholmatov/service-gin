@@ -2,12 +2,14 @@ package v1
 
 import (
 	"context"
+	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	pb "github.com/venomuz/project4/API-GATEWAY/genproto"
 	l "github.com/venomuz/project4/API-GATEWAY/pkg/logger"
 	"google.golang.org/protobuf/encoding/protojson"
-	"net/http"
-	"time"
 )
 
 func (h *handlerV1) CreateUser(c *gin.Context) {
@@ -61,4 +63,25 @@ func (h *handlerV1) GetUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, response)
+}
+type  response struct{
+	aa string
+	as string
+}
+
+func (h *handlerV1) Param(c *gin.Context) {
+	var jspbMarshal protojson.MarshalOptions
+	jspbMarshal.UseProtoNames = true
+
+	mail := c.Query("mail")
+	password := c.Query("password")
+	fmt.Println(mail,password)
+	_, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(h.cfg.CtxTimeout))
+	defer cancel()
+	ff := response{aa: mail, as: password}
+	fmt.Print(ff)
+	c.JSON(http.StatusOK, gin.H{
+		"gg": mail,
+		"ssd": password,
+	})
 }
